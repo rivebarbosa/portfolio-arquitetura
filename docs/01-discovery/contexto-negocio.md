@@ -24,7 +24,7 @@ Centralizar o pagamento na própria plataforma: o comprador paga **uma única ve
 
 ## Restrições conhecidas desde o início
 
-- **Regulatória**: o sistema vai operar como *intermediador de pagamentos*, o que impõe obrigações do Banco Central (rastreabilidade de cada transação, prazos de liquidação, KYC dos vendedores).
+- **Regulatória**: o sistema vai operar como *intermediador de pagamentos*, o que impõe obrigações do Banco Central (rastreabilidade de cada transação, prazos de liquidação, KYC = Know Your Customer ("conheça seu cliente") KYC dos vendedores).
 - **Prazo**: o board quer uma primeira versão operacional em 4 meses, para rodar em paralelo ao modelo antigo antes de descontinuá-lo.
 - **Sazonalidade**: o pico de Black Friday já é conhecido (~35x o tráfego médio) e não é negociável — o sistema precisa suportar esse pico desde o dia 1, mesmo que o volume médio inicial seja baixo.
 
