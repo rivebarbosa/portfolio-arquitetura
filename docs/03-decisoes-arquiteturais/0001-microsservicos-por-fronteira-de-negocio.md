@@ -22,6 +22,10 @@ O sistema precisa suportar times separados evoluindo o fluxo de **autorização 
 
 Decompor por fronteira de negócio em 4 serviços: **checkout/autorização**, **split/liquidação**, **antifraude** e **disputas**, comunicando-se via eventos assíncronos (ver [ADR-0003](0003-processamento-assincrono-do-split.md)) para tudo que não seja o caminho de autorização.
 
+## Padrão arquitetural
+
+**Decompose by Business Capability** (catalogado por Chris Richardson em microservices.io): cada serviço mapeia diretamente a uma capacidade de negócio (autorizar pagamento, dividir valores, avaliar risco, mediar disputa), não a uma camada técnica. Cada serviço corresponde a um **Bounded Context** (DDD — Eric Evans): checkout, split, antifraude e disputas têm modelos de dados e linguagem ubíqua próprios, e só se comunicam através de eventos (contratos explícitos), nunca compartilhando modelo interno diretamente.
+
 ## Justificativa
 
 O RNF de disponibilidade (99,9% checkout vs. 99,5% split) e o RNF de escalabilidade (50x apenas no caminho de autorização) já indicavam, antes de qualquer preferência estilística por microsserviços, que esses dois domínios têm perfis operacionais incompatíveis para viverem no mesmo processo. Um monólito exigiria escalar o antifraude e as disputas junto com o pico de Black Friday, desperdiçando recursos sem necessidade.

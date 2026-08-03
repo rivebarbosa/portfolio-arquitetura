@@ -22,6 +22,10 @@ Uma única operação de negócio ("comprador paga → vendedores recebem") atra
 
 Implementar o fluxo de pagamento como uma **Saga coreografada**: cada serviço publica um evento ao concluir sua etapa, e cada etapa subsequente tem uma ação de compensação definida caso um passo posterior falhe (ex: se o antifraude sinalizar depois que o split já foi calculado, o evento de compensação reverte o split antes da liquidação).
 
+## Padrão arquitetural
+
+**Saga Pattern**, na variante **Choreography-based Saga** (cada serviço decide e reage sozinho a partir dos eventos que recebe, sem um orquestrador central — diferente da variante **Orchestration-based Saga**, citada na seção "Revisitar quando" como possível evolução). O mecanismo de rollback é uma instância do **Compensating Transaction pattern** (Azure Architecture Center): como não há transação distribuída real para reverter, cada etapa define uma ação de negócio equivalente a "desfazer" seu efeito.
+
 ## Justificativa
 
 A resposta do discovery de que o resultado final precisa ser tudo-ou-nada, mas pode levar minutos, é exatamente o cenário para o qual Saga foi desenhado — e o 2PC introduziria bloqueio síncrono entre serviços que o RNF de escalabilidade (50x no pico) não suporta bem.

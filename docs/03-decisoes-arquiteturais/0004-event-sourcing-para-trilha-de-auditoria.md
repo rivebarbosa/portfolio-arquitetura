@@ -22,6 +22,10 @@ Compliance apontou, como restrição inegociável (não uma preferência), que c
 
 Adotar event sourcing para o histórico de estado de cada transação: os eventos são a fonte da verdade e são append-only; uma projeção (tabela de leitura otimizada) é mantida à parte para consultas rápidas de "estado atual" (RF-05), reconstruível a qualquer momento a partir dos eventos.
 
+## Padrão arquitetural
+
+**Event Sourcing** (Greg Young / Martin Fowler): o estado não é armazenado diretamente, é derivado de uma sequência imutável e append-only de eventos — a trilha de auditoria deixa de ser um subproduto e passa a ser o próprio modelo de dados. A separação entre os eventos (modelo de escrita) e a projeção de leitura otimizada para consulta (RF-05) é uma instância de **CQRS** (Command Query Responsibility Segregation): escrita e leitura têm modelos distintos, otimizados para propósitos diferentes, conectados por uma projeção reconstruível.
+
 ## Justificativa
 
 Como a exigência de auditoria não é uma preferência técnica e sim uma restrição regulatória (poder de veto do Compliance, ver [stakeholders.md](../01-discovery/stakeholders.md)), a Opção A exigiria de qualquer forma construir uma trilha de eventos paralela para não violar a restrição — a diferença é que, na Opção A, essa trilha corre o risco de divergir do status "oficial" da tabela principal. Tornar o evento a própria fonte da verdade elimina essa divergência por construção.

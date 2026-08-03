@@ -22,6 +22,10 @@ O RNF de desempenho exige P95 < 3s para a autorização do pagamento (caminho qu
 
 A autorização do pagamento é síncrona e retorna ao comprador em até 3s (P95). O cálculo de split, a verificação antifraude e a liquidação acontecem de forma assíncrona, disparados por um evento `PagamentoAutorizado`, com conclusão em até 5 minutos (RNF).
 
+## Padrão arquitetural
+
+**Asynchronous Request-Reply** (Azure Architecture Center): o cliente recebe uma confirmação imediata (compra aprovada) enquanto o processamento de fundo continua, com o resultado final consultável depois (RF-05) em vez de entregue na mesma resposta. A distribuição do evento `PagamentoAutorizado` para os serviços de Split e Antifraude — cada um com seu próprio consumer, recebendo uma cópia independente do mesmo evento — é o padrão **Publish-Subscribe** (não deve ser confundido com **Competing Consumers**, que seria o caso de múltiplas instâncias do *mesmo* serviço disputando mensagens de uma única fila para balancear carga).
+
 ## Justificativa
 
 Essa é a tradução direta de uma resposta de discovery em arquitetura: a tolerância de minutos do vendedor não é um detalhe de UX, é o que permite desacoplar dois RNFs de latência incompatíveis (3s vs. minutos) sem forçar o caminho mais lento a definir o SLA do caminho mais rápido.
